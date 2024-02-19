@@ -1,0 +1,2 @@
+# Wenaknan
+Wenaknan adalah sebuah web app yang menyediakan jasa  pemesanan makanan dan minuman, dilengkapi dengan sebuah sistem rekomendasi  berbasis kecerdasan buatan yang bisa memberikan rekomendasi menu yang lebih  terpersonalisasi terhadap pengguna.
