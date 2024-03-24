@@ -1,11 +1,9 @@
-const { Pool } = require('pg');
+const { Sequelize } = require('sequelize');
 
 try {
-    const pool = new Pool({
-        connectionString: process.env.DATABASE_URL,
-    });
+    const sequelize = new Sequelize(process.env.DATABASE_URL);
 
-    module.exports = { pool };
+    module.exports = sequelize;
 } catch (error) {
-    console.error('Error creating database pool', error);
+    console.error('Error creating Sequelize instance', error);
 }
