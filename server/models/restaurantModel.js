@@ -1,29 +1,28 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
 
-const Restaurant = sequelize.define('Restaurant', {
-    restaurantID: {
+const restaurant = sequelize.define('restaurant', {
+    restaurant_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
+        unique: true,
         autoIncrement: true,
     },
-    name: {
+    restaurant_name: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    rating: {
+    restaurant_location: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    restaurant_rating: {
         type: DataTypes.FLOAT,
         allowNull: false,
     },
-    location: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
+}, {
+    tableName: 'restaurant',
+    timestamps: false,
 });
 
-// Create the table if it doesn't exist
-Restaurant.sync({ force: false }).then(() => {
-    console.log('Restaurant table synced');
-});
-
-module.exports = Restaurant;
+module.exports = restaurant;
