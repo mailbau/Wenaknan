@@ -1,4 +1,5 @@
 const express = require('express');
+const listEndpoints = require('express-list-endpoints');
 require('dotenv').config();
 
 const restaurantRouter = require('./routers/restaurantRouter');
@@ -9,6 +10,9 @@ const PORT = process.env.PORT || 8080;
 app.use(express.json());
 app.use('/restaurants', restaurantRouter);
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(listEndpoints(app));
 });
+
+module.exports = server;
