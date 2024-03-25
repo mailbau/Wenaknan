@@ -4,6 +4,7 @@ require('dotenv').config();
 
 const restaurantRouter = require('./routers/restaurantRouter');
 const userRouter = require('./routers/userRouter');
+const favoriteRouter = require('./routers/favoriteRouter');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -11,6 +12,7 @@ const PORT = process.env.PORT || 8080;
 app.use(express.json());
 app.use('/restaurant', restaurantRouter);
 app.use('/user', userRouter);
+app.use('/favorite', favoriteRouter);
 
 const server = app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
