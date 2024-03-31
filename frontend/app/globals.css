@@ -139,7 +139,7 @@ hr {
 
 @keyframes shine {	
   to {
-    background-position: 100% 0, /* move highlight to right */ 0 0;
+    background-position: 100% 0,  0 0;
   }
 }
 
@@ -174,7 +174,7 @@ hr {
 	padding-bottom: 0.85rem;
 }
 
-/* date range style*/
+//date range style
 .rdrDayToday:not(.rdrDayPassive) .rdrInRange ~ .rdrDayNumber span::after,
 .rdrDayToday:not(.rdrDayPassive) .rdrStartEdge ~ .rdrDayNumber span::after,
 .rdrDayToday:not(.rdrDayPassive) .rdrEndEdge ~ .rdrDayNumber span::after,
@@ -194,4 +194,5 @@ hr {
 .rdrWeekDay {
 	color: #1e1f23 !important;
 	font-weight: 500 !important;
-} */
+} 
+*/
