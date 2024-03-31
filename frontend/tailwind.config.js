@@ -7,7 +7,8 @@ module.exports = {
   ],
   theme: {
     fontFamily: {
-      sans: ["Roboto"],
+      roboto: ['Roboto', 'sans-serif'],
+      poppins: ['Poppins', 'sans-serif'],
     },
     extend: {
       backgroundImage: {
