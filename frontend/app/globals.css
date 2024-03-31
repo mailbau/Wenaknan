@@ -64,19 +64,20 @@ hr {
 .btn-primary {
   background-color: var(--RBred);
   border-radius: 0.25rem;
-  color: var(--RBbeige);
+  color: white;
   font-family: "Roboto", sans-serif;
   font-weight: 400;
   padding: 0.75rem 2.5rem;
 }
 
 .btn-primary-sm {
-  background-color: var(--RBgreen);
+  background-color: var(--RBred);
   border-radius: 0.25rem;
   color: var(--RBgray);
   font-family: "Roboto", sans-serif;
   font-weight: 400;
   padding: 0.75rem;
+
 }
 
 .btn-secondary {
@@ -95,6 +96,11 @@ hr {
   font-family: "Roboto", sans-serif;
   font-weight: 400;
   padding: 0.75rem 0.75rem;
+}
+
+.btn-primary:hover,
+.btn-primary-sm:hover {
+  background-color: var(--RBdarkred); /* Change background color on hover */
 }
 
 .font-roboto {
@@ -121,6 +127,31 @@ hr {
 .text-rb-darkgreen {
   color: var(--RBdarkgreen);
 }
+
+.bg-rb-red {
+  background: var(--RBred);
+}
+
+.bg-rb-white {
+  background: var(--RBwhite);
+}
+
+.bg-rb-beige {
+  background: var(--RBbeige);
+}
+
+.bg-rb-lightbeige {
+  background: var(--RBlightbeige);
+}
+
+.border-rb-red {
+  border-color: var(--RBred);
+}
+
+.border-rb-black {
+  border-color: var(--RBblack);
+}
+
 /* 
 .skeleton-loader {
   display: block;
@@ -143,21 +174,7 @@ hr {
   }
 }
 
-.bg-rb-green {
-  background: var(--RBgreen);
-}
 
-.bg-rb-white {
-  background: var(--RBwhite);
-}
-
-.border-rb-green {
-  border-color: var(--RBgreen);
-}
-
-.border-rb-black {
-  border-color: var(--RBblack);
-}
 
 .img-white-logo {
 	width: 230px;

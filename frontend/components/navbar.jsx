@@ -16,7 +16,7 @@ function Navbar() {
         <img
           loading="lazy"
           src="https://cdn.builder.io/api/v1/image/assets/TEMP/edcf1860700335d1b876d81340d06f4d167879a4a1957f785d660b92ed3b46b8?"
-          className="shrink-0 my-auto aspect-[1.37] fill-white w-[51px] max-sm:w-10"
+          className="shrink-0 my-auto aspect-[1.37] fill-white w-[40px] max-sm:w-10"
         />
       </div>
     </div>
