@@ -1,33 +1,197 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Ubuntu&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --RBblack: #222222;
+  --RBdarkred: #952323;
+  --RBred: #A73121;
+  --RBwhite: #e4e4e4;
+  --RBbeige: #DAD4B5;
+  --RBlightbeige: #F2E8C6;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+h1,
+h2,
+h3,
+h4,
+p,
+a,
+label,
+select {
+  color: var(--RBblack);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: "Roboto", sans-serif;
+}
+
+a,
+p,
+label,
+select {
+  font-family: "Roboto", sans-serif;
+}
+
+a:hover {
+  cursor: pointer;
+}
+
+input[type="checkbox"] {
+  width: 14px;
+}
+
+select {
+  background-color: var(--RBlightbeige);
+  border-radius: 4px;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background-color: var(--RBwhite);
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+hr {
+  border-top-width: 0.125rem;
+  border-top-color: var(--RBbeige);
+}
+
+.btn-primary {
+  background-color: var(--RBred);
+  border-radius: 0.25rem;
+  color: var(--RBbeige);
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  padding: 0.75rem 2.5rem;
+}
+
+.btn-primary-sm {
+  background-color: var(--RBgreen);
+  border-radius: 0.25rem;
+  color: var(--RBgray);
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  padding: 0.75rem;
+}
+
+.btn-secondary {
+  border: 1px var(--RBdarkred) solid;
+  border-radius: 0.25rem;
+  color: var(--RBdarkred);
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  padding: 0.75rem 2.5rem;
+}
+
+.btn-secondary-sm {
+  border: 2px var(--RBdarkred) solid;
+  border-radius: 0.25rem;
+  color: var(--RBdarkred);
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  padding: 0.75rem 0.75rem;
+}
+
+.font-roboto {
+  font-family: "Roboto", sans-serif;
+}
+
+.font-inter {
+  font-family: "Inter", sans-serif;
+}
+
+.font-poppins {
+  font-family: "Poppins", sans-serif;
+}
+
+.box-info {
+  border: 1px var(--RBgreen) dashed;
+  border-radius: 4px;
+}
+
+.text-rb-green {
+  color: var(--RBgreen);
+}
+
+.text-rb-darkgreen {
+  color: var(--RBdarkgreen);
+}
+/* 
+.skeleton-loader {
+  display: block;
+  background: linear-gradient(	  
+      to right,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0.5) 50%,
+      rgba(255, 255, 255, 0) 80%
+    ),
+    lightgray;
+  background-repeat: repeat-y;
+  background-size: 50px 500px;
+  background-position: 0 0;
+  animation: shine 1s infinite;	  
+}
+
+@keyframes shine {	
+  to {
+    background-position: 100% 0, /* move highlight to right */ 0 0;
   }
 }
+
+.bg-rb-green {
+  background: var(--RBgreen);
+}
+
+.bg-rb-white {
+  background: var(--RBwhite);
+}
+
+.border-rb-green {
+  border-color: var(--RBgreen);
+}
+
+.border-rb-black {
+  border-color: var(--RBblack);
+}
+
+.img-white-logo {
+	width: 230px;
+	height: 130px;
+}
+
+.img-white-logo1 {
+	width: 255px;
+	height: 155px;
+}
+
+.py-reg{
+	padding-top: 0.85rem;
+	padding-bottom: 0.85rem;
+}
+
+/* date range style*/
+.rdrDayToday:not(.rdrDayPassive) .rdrInRange ~ .rdrDayNumber span::after,
+.rdrDayToday:not(.rdrDayPassive) .rdrStartEdge ~ .rdrDayNumber span::after,
+.rdrDayToday:not(.rdrDayPassive) .rdrEndEdge ~ .rdrDayNumber span::after,
+.rdrDayToday:not(.rdrDayPassive) .rdrSelected ~ .rdrDayNumber span::after {
+	background-color: #fff !important;
+}
+
+.rdrdayToday .rdrDayNumber span:after {
+	background: #ed1d24 !important;
+}
+
+.rdrMonthAndYearPickers {
+	font-size: 16px;
+}
+
+.rdrDayNumber,
+.rdrWeekDay {
+	color: #1e1f23 !important;
+	font-weight: 500 !important;
+} */
