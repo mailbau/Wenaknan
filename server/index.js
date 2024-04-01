@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const listEndpoints = require('express-list-endpoints');
 require('dotenv').config();
 
@@ -7,6 +8,7 @@ const userRouter = require('./routers/userRouter');
 const favoriteRouter = require('./routers/favoriteRouter');
 
 const app = express();
+app.use(cors());
 const PORT = process.env.PORT || 8080;
 
 app.use(express.json());
