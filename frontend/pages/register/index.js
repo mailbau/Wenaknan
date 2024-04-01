@@ -90,10 +90,10 @@ const registerPage = () => {
                                 <div className="flex gap-5 justify-between max-md:flex-wrap max-md:mr-2.5 max-md:max-w-full">
                                     <h1 className="self-start text-xl text-black">Welcome</h1>
                                     <div className="text-sm text-red-800">
-                                        <span>No Account ?</span>
+                                        <span>Already have an account ?</span>
                                         <br />
                                         <a href="#" className="text-red-800">
-                                            Sign up
+                                            Sign in
                                         </a>
                                     </div>
                                 </div>
@@ -137,7 +137,7 @@ const registerPage = () => {
                                             className="w-full bg-transparent focus:outline-none"
                                         />
                                     </div>
-                                    <Button className="self-end mt-28 w-[236px] max-md:mt-10">Sign in</Button>
+                                    <Button className="self-end mt-28 w-[236px] max-md:mt-10">Register</Button>
                                 </form>
                             </div>
                         </div>
