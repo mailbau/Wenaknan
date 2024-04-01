@@ -14,7 +14,7 @@ const userController = {
 
     addUser: async (req, res) => {
         try {
-            const { name, user_name, user_password } = req.body;
+            const { name, user_name, user_email, user_password } = req.body;
 
             const existingUser = await user.findOne({ where: { user_name } });
             if (existingUser) {
@@ -26,6 +26,7 @@ const userController = {
             const newUser = await user.create({
                 name,
                 user_name,
+                user_email,
                 user_password: hashedPassword
             });
             res.status(201).json({ message: 'User registered successfully', user: newUser });
