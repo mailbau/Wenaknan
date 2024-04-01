@@ -32,6 +32,8 @@ const registerPage = () => {
     const [userName, setUserName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -45,9 +47,20 @@ const registerPage = () => {
                 user_password: password,
             });
 
+            setSuccessMessage("User registered successfully");
+            setErrorMessage("");
+
+            // Clear the form
+            setName("");
+            setUserName("");
+            setEmail("");
+            setPassword("");
+
             console.log(response.data);
         }
         catch (error) {
+            setSuccessMessage("");
+            setErrorMessage("Error registering user");
             console.error('Error registering user', error);
         }
     };
@@ -87,6 +100,8 @@ const registerPage = () => {
                                 <h2 className="mt-4 text-6xl font-medium text-black max-md:max-w-full max-md:text-4xl">
                                     Register
                                 </h2>
+                                {successMessage && <p className="text-green-600">{successMessage}</p>}
+                                {errorMessage && <p className="text-red-600">{errorMessage}</p>}
                                 <form onSubmit={handleSubmit}>
                                     <InputField
                                         label="Enter your name"
