@@ -27,7 +27,7 @@ function InputField({ label, placeholder, value, onChange }) {
     );
 }
 
-const registerPage = () => {
+const RegisterPage = () => {
     const [name, setName] = useState("");
     const [userName, setUserName] = useState("");
     const [email, setEmail] = useState("");
@@ -148,4 +148,4 @@ const registerPage = () => {
     );
 }
 
-export default registerPage;
+export default RegisterPage;

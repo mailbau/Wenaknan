@@ -1,5 +1,6 @@
 const user = require('../models/userModel');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const userController = {
     getAllUsers: async (req, res) => {
@@ -52,7 +53,46 @@ const userController = {
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
+    },
+
+    verifyUser: async (req, res) => {
+        try {
+            const { usernameOrEmail, password } = req.body;
+
+            // check if usernameOrEmail is email
+            const isEmail = usernameOrEmail.includes('@');
+
+            let existingUser;
+
+            if (isEmail) {
+                existingUser = await user.findOne({ where: { user_email: usernameOrEmail } });
+            } else {
+                existingUser = await user.findOne({ where: { user_name: usernameOrEmail } });
+            }
+
+            if (!existingUser) {
+                return res.status(401).json({ message: 'Invalid credentials' });
+            }
+
+            // console.log('Retrieved hashed password from database:', existingUser.user_password);
+            // console.log('Plain password entered by user:', password);
+
+            // compare passwords
+            const passwordMatch = await bcrypt.compare(password, existingUser.user_password);
+            if (!passwordMatch) {
+                return res.status(401).json({ message: 'Invalid credentials' });
+            }
+
+            // if credentials are valid, generate jwt token
+            const token = jwt.sign({ user_id: existingUser.user_id }, 'your-secret-key', { expiresIn: '1h' });
+
+            res.status(200).json({ message: 'Login Successful', token });
+        } catch (error) {
+            console.error('Error logging in user', error);
+            res.status(500).json({ error: error.message });
+        }
     }
+
 };
 
 module.exports = userController;

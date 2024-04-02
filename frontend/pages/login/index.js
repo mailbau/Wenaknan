@@ -1,6 +1,63 @@
 import * as React from "react";
+import { useState } from "react";
+import axios from "axios";
 
-const loginPage = () => {
+function Button({ children, className }) {
+    return (
+        <button type="submit" className={`justify-center items-center px-16 py-5 text-base font-medium text-white bg-red-800 rounded-xl shadow-lg ${className}`}>
+            {children}
+        </button>
+    );
+}
+
+function InputField({ label, placeholder, value, onChange }) {
+    return (
+        <>
+            <div className="mt-5 text-base text-black max-md:max-w-full">{label}</div>
+            <div className="justify-center items-start px-6 py-6 mt-5 text-sm font-light bg-white rounded-lg border border-blue-500 border-solid text-zinc-500 max-md:px-5 max-md:max-w-full">
+                <input
+                    type="text"
+                    placeholder={placeholder}
+                    value={value}
+                    onChange={onChange}
+                    className="w-full bg-transparent focus:outline-none"
+                />
+            </div>
+        </>
+    );
+}
+
+function LoginPage() {
+
+    const [usernameOrEmail, setUsernameOrEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await axios.post("http://localhost:8080/user/login", {
+                usernameOrEmail,
+                password,
+            });
+
+            setSuccessMessage("Login successful");
+            setErrorMessage("");
+
+            // Clear the form
+            setUsernameOrEmail("");
+            setPassword("");
+
+            console.log("Login successful", response.data);
+        } catch (error) {
+            setSuccessMessage("");
+            setErrorMessage("Invalid credentials");
+            console.error("Error logging in user", error);
+        }
+    };
+
     return (
         <div className="flex flex-col justify-center bg-white">
             <div className="flex flex-col justify-center w-full bg-white max-md:max-w-full">
@@ -17,6 +74,7 @@ const loginPage = () => {
                                 <img
                                     loading="lazy"
                                     src="/assets/food.png"
+                                    alt="Decorative image"
                                     className="mt-32 w-full aspect-[1.02] max-md:mt-10 max-md:max-w-full"
                                 />
                             </div>
@@ -24,51 +82,37 @@ const loginPage = () => {
                         <div className="flex flex-col ml-5 w-6/12 max-md:ml-0 max-md:w-full">
                             <div className="flex flex-col grow px-11 pt-12 pb-20 mt-4 w-full bg-white bg-opacity-80 rounded-[40px] max-md:px-5 max-md:mt-10 max-md:max-w-full">
                                 <div className="max-md:max-w-full">
-                                    <div className="flex gap-5 max-md:flex-col max-md:gap-0">
-                                        <div className="flex flex-col w-[79%] max-md:ml-0 max-md:w-full">
-                                            <div className="flex flex-col grow text-black max-md:mt-10">
-                                                <div className="text-xl">Welcome </div>
-                                                <div className="mt-8 text-6xl font-medium max-md:text-4xl">
-                                                    Sign in
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col ml-5 w-[21%] max-md:ml-0 max-md:w-full">
-                                            <div className="text-sm text-red-800 max-md:mt-10">
-                                                <span className="">No Account ?</span>
-                                                <br />
-                                                <span className="text-red-800">Sign up</span>
-                                            </div>
+                                    <div className="flex gap-5 justify-between max-md:flex-wrap max-md:mr-2.5 max-md:max-w-full">
+                                        <h1 className="self-start text-xl text-black">Welcome</h1>
+                                        <div className="text-sm text-red-800">
+                                            <span>No Account ?</span>
+                                            <br />
+                                            <a href="/signup" className="text-red-800">Sign up</a> {/* Change "#" to the actual URL of your sign-up page */}
                                         </div>
                                     </div>
-                                </div>
-                                <div className="mt-28 text-base text-black max-md:mt-10 max-md:max-w-full">
-                                    Enter your username or email address
-                                </div>
-                                <div className="justify-center items-start px-6 py-6 mt-5 text-sm font-light bg-white rounded-lg border border-blue-500 border-solid text-zinc-500 max-md:px-5 max-md:max-w-full">
-                                    <input
-                                        type="username"
-                                        placeholder="Username or Email"
-                                        name="username"
-                                        className="w-full bg-transparent outline-none"
-                                    />
-                                </div>
-                                <div className="mt-12 text-base text-black max-md:mt-10 max-md:max-w-full">
-                                    Enter your Password
-                                </div>
-                                <div className="justify-center items-start px-6 py-6 mt-5 text-sm font-light whitespace-nowrap bg-white rounded-lg border border-solid border-zinc-400 text-zinc-500 max-md:px-5 max-md:max-w-full">
-                                    <input
-                                        type="password"
-                                        placeholder="Password"
-                                        name="password"
-                                        className="w-full bg-transparent outline-none"
-                                    />
-                                </div>
-                                <div className="self-end mt-11 text-sm text-blue-500 max-md:mt-10 max-md:mr-2.5">
-                                    Forgot Password
-                                </div>
-                                <div className="justify-center items-center self-end px-16 py-5 mt-12 max-w-full text-base font-medium text-white bg-red-800 rounded-xl shadow-lg w-[236px] max-md:px-5 max-md:mt-10">
-                                    Sign in
+                                    <h2 className="mt-4 text-6xl font-medium text-black max-md:max-w-full max-md:text-4xl">
+                                        Sign in
+                                    </h2>
+                                    {successMessage && <p className="text-green-600">{successMessage}</p>}
+                                    <form onSubmit={handleSubmit}>
+                                        <InputField
+                                            label="Enter your username or email address"
+                                            placeholder="Username or email address"
+                                            value={usernameOrEmail}
+                                            onChange={(e) => setUsernameOrEmail(e.target.value)}
+                                        />
+                                        <InputField
+                                            label="Enter your Password"
+                                            placeholder="Password"
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                        />
+                                        <div className="self-end mt-11 text-sm text-blue-500 max-md:mt-10 max-md:mr-2.5">
+                                            Forgot Password
+                                        </div>
+                                        {errorMessage && <p className="text-red-600">{errorMessage}</p>}
+                                        <Button className="justify-center items-center self-end px-16 py-5 mt-12 max-w-full text-base font-medium text-white bg-red-800 rounded-xl shadow-lg w-[236px] max-md:px-5 max-md:mt-10">Sign in</Button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -79,4 +123,4 @@ const loginPage = () => {
     );
 }
 
-export default loginPage;
+export default LoginPage;
