@@ -1,4 +1,5 @@
 const restaurant = require('../models/restaurantModel');
+const upload = require('../middleware/multerConfig');
 
 const restaurantController = {
     getAllRestaurants: async (req, res) => {
@@ -13,11 +14,19 @@ const restaurantController = {
 
     addRestaurant: async (req, res) => {
         try {
-            const { restaurant_name, restaurant_location, restaurant_rating } = req.body;
+            if (!req.file) {
+                return res.status(400).json({ message: 'Please upload an image' });
+            }
+
+            const { restaurant_name, restaurant_location, restaurant_description, restaurant_rating } = req.body;
+            const restaurant_photo_path = req.file.path;
+
             const newRestaurant = await restaurant.create({
                 restaurant_name,
                 restaurant_location,
-                restaurant_rating
+                restaurant_description,
+                restaurant_rating,
+                restaurant_photo_path
             });
             res.status(201).json(newRestaurant);
         } catch (error) {

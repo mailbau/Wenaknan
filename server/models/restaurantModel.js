@@ -16,9 +16,20 @@ const restaurant = sequelize.define('restaurant', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    restaurant_description: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    // restaurant_category: {
+    //     type: DataTypes.STRING,
+    //     allowNull: false,
+    // },
     restaurant_rating: {
         type: DataTypes.FLOAT,
         allowNull: false,
+    },
+    restaurant_photo_path: {
+        type: DataTypes.STRING,
     },
 }, {
     tableName: 'restaurant',
