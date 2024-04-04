@@ -12,6 +12,7 @@ app.use(cors());
 const PORT = process.env.PORT || 8080;
 
 app.use(express.json());
+app.use('/storage/restaurant', express.static('storage/restaurant'));
 app.use('/restaurant', restaurantRouter);
 app.use('/user', userRouter);
 app.use('/favorite', favoriteRouter);
