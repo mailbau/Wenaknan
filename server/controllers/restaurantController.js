@@ -4,7 +4,15 @@ const upload = require('../middleware/multerConfig');
 const restaurantController = {
     getAllRestaurants: async (req, res) => {
         try {
-            const restaurants = await restaurant.findAll();
+            const page = parseInt(req.query.page) || 1;
+            const pageSize = parseInt(req.query.pageSize) || 2;
+
+            const offset = (page - 1) * pageSize;
+
+            const restaurants = await restaurant.findAll({
+                limit: pageSize,
+                offset: offset
+            });
             res.status(200).json(restaurants);
         } catch (error) {
             console.error('Error getting all restaurants', error);
