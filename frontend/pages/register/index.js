@@ -92,7 +92,7 @@ const RegisterPage = () => {
                                     <div className="text-sm text-red-800">
                                         <span>Already have an account ?</span>
                                         <br />
-                                        <a href="#" className="text-red-800">
+                                        <a href="/login" className="text-red-800">
                                             Sign in
                                         </a>
                                     </div>

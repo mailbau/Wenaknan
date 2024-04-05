@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
 import axios from "axios";
+import Link from "next/link";
 
 function Button({ children, className }) {
     return (
@@ -87,7 +88,7 @@ function LoginPage() {
                                         <div className="text-sm text-red-800">
                                             <span>No Account ?</span>
                                             <br />
-                                            <a href="/signup" className="text-red-800">Sign up</a> {/* Change "#" to the actual URL of your sign-up page */}
+                                            <a href="/register" className="text-red-800">Sign up</a>
                                         </div>
                                     </div>
                                     <h2 className="mt-4 text-6xl font-medium text-black max-md:max-w-full max-md:text-4xl">
@@ -111,7 +112,9 @@ function LoginPage() {
                                             Forgot Password
                                         </div>
                                         {errorMessage && <p className="text-red-600">{errorMessage}</p>}
-                                        <Button className="justify-center items-center self-end px-16 py-5 mt-12 max-w-full text-base font-medium text-white bg-red-800 rounded-xl shadow-lg w-[236px] max-md:px-5 max-md:mt-10">Sign in</Button>
+                                        <Link href="/main">
+                                            <Button className="justify-center items-center self-end px-16 py-5 mt-12 max-w-full text-base font-medium text-white bg-red-800 rounded-xl shadow-lg w-[236px] max-md:px-5 max-md:mt-10">Sign in</Button>
+                                        </Link>
                                     </form>
                                 </div>
                             </div>
