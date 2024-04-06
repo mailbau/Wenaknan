@@ -7,7 +7,9 @@ const storage = multer.diskStorage({
         cb(null, 'storage/restaurant');
     },
     filename: (req, file, cb) => {
-        cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
+        const restaurant_name = req.body.restaurant_name.replace(/\s/g, '');
+        const filename = `${restaurant_name}${path.extname(file.originalname)}`;
+        cb(null, filename);
     }
 });
 
