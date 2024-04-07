@@ -10,7 +10,7 @@ function Button({ children, className }) {
     );
 }
 
-function InputField({ label, placeholder, value, onChange }) {
+function InputField({ label, placeholder, value, onChange, errorMessage }) {
     return (
         <>
             <div className="mt-5 text-base text-black max-md:max-w-full">{label}</div>
@@ -23,6 +23,7 @@ function InputField({ label, placeholder, value, onChange }) {
                     className="w-full bg-transparent focus:outline-none"
                 />
             </div>
+            {errorMessage && <p className="text-red-600">{errorMessage}</p>}
         </>
     );
 }
@@ -33,11 +34,32 @@ const RegisterPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
+    const [emailError, setEmailError] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+
+    const validateEmail = (email) => {
+        const regex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
+        return regex.test(email);
+    };
+
+    const handleEmailChange = (e) => {
+        const emailValue = e.target.value;
+        setEmail(emailValue);
+        if (!validateEmail(emailValue)) {
+            setEmailError("Please enter a valid email address");
+        } else {
+            setEmailError("");
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log("Form submitted")
+
+        if (emailError) {
+            setErrorMessage("Please enter a valid email address");
+            return;
+        }
 
         try {
             const response = await axios.post("http://localhost:8080/user/add", {
@@ -119,7 +141,8 @@ const RegisterPage = () => {
                                         label="Enter your email address"
                                         placeholder="Email address"
                                         value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        onChange={handleEmailChange}
+                                        errorMessage={emailError}
                                     />
                                     <div className="mt-5 text-base text-black max-md:max-w-full">
                                         Enter your Password
