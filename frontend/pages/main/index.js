@@ -2,6 +2,7 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "@/components/navbar";
+import RestaurantCard from "./components/restcard";
 
 function Sidebar() {
     return (
@@ -68,41 +69,6 @@ function Sidebar() {
     );
 }
 
-function RestaurantCard({ restaurant }) {
-    const { restaurant_name, restaurant_description, restaurant_rating, restaurant_photo_path } = restaurant;
-
-    return (
-        <article className="flex flex-col p-2.5 bg-white max-md:max-w-full">
-            <h2 className="text-4xl font-extrabold max-md:max-w-full">{restaurant_name}</h2>
-            <img
-                loading="lazy"
-                src={restaurant.image}
-                className="mt-5 w-full aspect-[2.22] max-md:max-w-full"
-                alt={restaurant_name}
-            />
-            <div className="flex gap-5 justify-between pr-16 mt-5 w-full text-2xl font-semibold whitespace-nowrap max-md:flex-wrap max-md:pr-5 max-md:max-w-full">
-                <img
-                    loading="lazy"
-                    src=""
-                    className="shrink-0 border-4 border-black border-solid aspect-[1.15] stroke-[4px] stroke-black w-[30px]"
-                    alt=""
-                />
-                <div className="flex gap-1">
-                    <div>{restaurant_rating}</div>
-                    <img
-                        loading="lazy"
-                        src=""
-                        className="shrink-0 border border-black border-solid aspect-[1.04] fill-yellow-400 stroke-[1px] stroke-black w-[27px]"
-                        alt="star"
-                    />
-                </div>
-            </div>
-            <p className="mt-5 text-lg font-medium max-md:max-w-full">
-                {restaurant_description}
-            </p>
-        </article>
-    );
-}
 
 const STORAGE_URL = 'http://localhost:8080';
 
