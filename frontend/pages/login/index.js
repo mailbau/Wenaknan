@@ -2,6 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 function Button({ children, className }) {
     return (
@@ -11,13 +12,13 @@ function Button({ children, className }) {
     );
 }
 
-function InputField({ label, placeholder, value, onChange }) {
+function InputField({ label, placeholder, value, onChange, type }) {
     return (
         <>
             <div className="mt-5 text-base text-black max-md:max-w-full">{label}</div>
             <div className="justify-center items-start px-6 py-6 mt-5 text-sm font-light bg-white rounded-lg border border-blue-500 border-solid text-zinc-500 max-md:px-5 max-md:max-w-full">
                 <input
-                    type="text"
+                    type={type}
                     placeholder={placeholder}
                     value={value}
                     onChange={onChange}
@@ -34,6 +35,9 @@ function LoginPage() {
     const [password, setPassword] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const router = useRouter();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -50,11 +54,16 @@ function LoginPage() {
             // Clear the form
             setUsernameOrEmail("");
             setPassword("");
+            setIsLoggedIn(true);
 
             console.log("Login successful", response.data);
+
+            // Redirect to the main page
+            router.push("/main");
         } catch (error) {
             setSuccessMessage("");
             setErrorMessage("Invalid credentials");
+            setIsLoggedIn(false);
             console.error("Error logging in user", error);
         }
     };
@@ -97,12 +106,14 @@ function LoginPage() {
                                     {successMessage && <p className="text-green-600">{successMessage}</p>}
                                     <form onSubmit={handleSubmit}>
                                         <InputField
+                                            type="text"
                                             label="Enter your username or email address"
                                             placeholder="Username or email address"
                                             value={usernameOrEmail}
                                             onChange={(e) => setUsernameOrEmail(e.target.value)}
                                         />
                                         <InputField
+                                            type="password"
                                             label="Enter your Password"
                                             placeholder="Password"
                                             value={password}
@@ -112,9 +123,13 @@ function LoginPage() {
                                             Forgot Password
                                         </div>
                                         {errorMessage && <p className="text-red-600">{errorMessage}</p>}
-                                        <Link href="/main">
-                                            <Button className="justify-center items-center self-end px-16 py-5 mt-12 max-w-full text-base font-medium text-white bg-red-800 rounded-xl shadow-lg w-[236px] max-md:px-5 max-md:mt-10">Sign in</Button>
-                                        </Link>
+                                        {isLoggedIn ? (
+                                            <Link href="/main">
+                                                <Button className="justify-center items-center self-end px-16 py-5 mt-12 max-w-full text-base font-medium text-white bg-red-800 rounded-xl shadow-lg w-[236px] max-md:px-5 max-md:mt-10">Sign in</Button>
+                                            </Link>
+                                        ) : (
+                                            <Button type="submit" className="justify-center items-center self-end px-16 py-5 mt-12 max-w-full text-base font-medium text-white bg-red-800 rounded-xl shadow-lg w-[236px] max-md:px-5 max-md:mt-10">Sign in</Button>
+                                        )}
                                     </form>
                                 </div>
                             </div>
