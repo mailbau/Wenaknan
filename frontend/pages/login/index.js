@@ -2,6 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 function Button({ children, className }) {
     return (
@@ -34,6 +35,9 @@ function LoginPage() {
     const [password, setPassword] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const router = useRouter();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -50,11 +54,16 @@ function LoginPage() {
             // Clear the form
             setUsernameOrEmail("");
             setPassword("");
+            setIsLoggedIn(true);
 
             console.log("Login successful", response.data);
+
+            // Redirect to the main page
+            router.push("/main");
         } catch (error) {
             setSuccessMessage("");
             setErrorMessage("Invalid credentials");
+            setIsLoggedIn(false);
             console.error("Error logging in user", error);
         }
     };
@@ -112,9 +121,13 @@ function LoginPage() {
                                             Forgot Password
                                         </div>
                                         {errorMessage && <p className="text-red-600">{errorMessage}</p>}
-                                        <Link href="/main">
-                                            <Button className="justify-center items-center self-end px-16 py-5 mt-12 max-w-full text-base font-medium text-white bg-red-800 rounded-xl shadow-lg w-[236px] max-md:px-5 max-md:mt-10">Sign in</Button>
-                                        </Link>
+                                        {isLoggedIn ? (
+                                            <Link href="/main">
+                                                <Button className="justify-center items-center self-end px-16 py-5 mt-12 max-w-full text-base font-medium text-white bg-red-800 rounded-xl shadow-lg w-[236px] max-md:px-5 max-md:mt-10">Sign in</Button>
+                                            </Link>
+                                        ) : (
+                                            <Button type="submit" className="justify-center items-center self-end px-16 py-5 mt-12 max-w-full text-base font-medium text-white bg-red-800 rounded-xl shadow-lg w-[236px] max-md:px-5 max-md:mt-10">Sign in</Button>
+                                        )}
                                     </form>
                                 </div>
                             </div>
