@@ -12,13 +12,13 @@ function Button({ children, className }) {
     );
 }
 
-function InputField({ label, placeholder, value, onChange }) {
+function InputField({ label, placeholder, value, onChange, type }) {
     return (
         <>
             <div className="mt-5 text-base text-black max-md:max-w-full">{label}</div>
             <div className="justify-center items-start px-6 py-6 mt-5 text-sm font-light bg-white rounded-lg border border-blue-500 border-solid text-zinc-500 max-md:px-5 max-md:max-w-full">
                 <input
-                    type="text"
+                    type={type}
                     placeholder={placeholder}
                     value={value}
                     onChange={onChange}
@@ -106,12 +106,14 @@ function LoginPage() {
                                     {successMessage && <p className="text-green-600">{successMessage}</p>}
                                     <form onSubmit={handleSubmit}>
                                         <InputField
+                                            type="text"
                                             label="Enter your username or email address"
                                             placeholder="Username or email address"
                                             value={usernameOrEmail}
                                             onChange={(e) => setUsernameOrEmail(e.target.value)}
                                         />
                                         <InputField
+                                            type="password"
                                             label="Enter your Password"
                                             placeholder="Password"
                                             value={password}
