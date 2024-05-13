@@ -2,7 +2,8 @@
   "compilerOptions": {
     "paths": {
       "@/*": [
-        "./*"
+        "./*",
+        "./pages/main/components/restcard.jsx" // Add the path to the missing file here
       ]
     }
   }
