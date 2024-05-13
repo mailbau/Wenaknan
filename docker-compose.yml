@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgres-container
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=tsodjfiu
+      - POSTGRES_USER=tsodjfiu
+      - POSTGRES_PASSWORD=6cP_TqFhAEPPNihuv5UkVAu_359gy9SX
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  backend:
+    build: ./server
+    container_name: backend-container
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_URL=postgresql://tsodjfiu:6cP_TqFhAEPPNihuv5UkVAu_359gy9SX@postgres/tsodjfiu
+
+  frontend:
+    build: ./frontend
+    container_name: frontend-container
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+    depends_on:
+      - backend
+
+networks:
+  app-network:
+    driver: bridge
