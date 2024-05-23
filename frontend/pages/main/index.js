@@ -1,41 +1,42 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { decode } from 'jwt-js-decode';
 import Navbar from "@/components/navbar";
-import RestaurantCard from "./components/restcard";
+import RestaurantCard from "../../components/restcard";
 
-function Sidebar() {
+function Sidebar({ userInfo }) {
     return (
         <aside className="flex flex-col w-[23%] max-md:ml-0 max-md:w-full">
             <div className="flex flex-col grow justify-between p-5 mx-auto w-full text-base font-medium bg-white max-md:mt-1.5">
                 <img loading="lazy" src="" className="w-8 aspect-square" />
                 <nav>
                     <ul>
-                        <li className="flex flex-col justify-center mt-7 w-full text-black bg-blue-50 rounded">
-                            <a href="#" className="flex gap-4 justify-center p-3 rounded">
+                        <li className="flex mt-7 w-full text-black bg-blue-50 rounded">
+                            <a href="#" className="flex items-center gap-4 p-3 rounded w-full">
                                 <img
                                     loading="lazy"
-                                    src=""
+                                    src="/assets/foryou.png"
                                     className="shrink-0 w-5 aspect-square"
                                 />
                                 <span className="flex-1">For You</span>
                             </a>
                         </li>
-                        <li className="flex gap-4 justify-center p-3 mt-3 whitespace-nowrap rounded text-slate-700">
-                            <a href="#">
+                        <li className="flex mt-3 w-full rounded">
+                            <a href="favorites" className="flex items-center gap-4 p-3 text-slate-700 rounded w-full">
                                 <img
                                     loading="lazy"
-                                    src=""
+                                    src="/assets/favorites.png"
                                     className="shrink-0 w-5 aspect-square"
                                 />
                                 <span className="flex-1">Favorites</span>
                             </a>
                         </li>
-                        <li className="flex gap-4 justify-center p-3 mt-3 whitespace-nowrap rounded text-slate-700">
-                            <a href="#">
+                        <li className="flex mt-3 w-full rounded">
+                            <a href="#" className="flex items-center gap-4 p-3 text-slate-700 rounded w-full">
                                 <img
                                     loading="lazy"
-                                    src=""
+                                    src="/assets/profile.png"
                                     className="shrink-0 w-5 aspect-square"
                                 />
                                 <span className="flex-1">Profile</span>
@@ -50,9 +51,9 @@ function Sidebar() {
                         className="shrink-0 w-10 aspect-square"
                     />
                     <div className="flex flex-col flex-1 my-auto">
-                        <div className="leading-[133%] text-slate-700">Michael Smith</div>
+                        <div className="leading-[133%] text-slate-700">{userInfo.name}</div>
                         <div className="mt-1 leading-[117%] text-slate-500">
-                            michaelsmith12@gmail.com
+                            {userInfo.email}
                         </div>
                     </div>
                 </div>
@@ -69,26 +70,18 @@ function Sidebar() {
     );
 }
 
-
 const STORAGE_URL = 'http://localhost:8080';
 
 function Main() {
     const [restaurants, setRestaurants] = useState([]);
-    const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-        fetchRestaurants();
-    }, []);
 
     const fetchRestaurants = async () => {
         try {
             const response = await fetch('http://localhost:8080/restaurant?page=1&pageSize=10');
             const data = await response.json();
-            console.log('Raw restaurant data:', data); // Logging raw data received
             const restaurantsWithAbsoluteImagePaths = data.map((restaurant) => {
                 const imagePath = `${STORAGE_URL}/${restaurant.restaurant_photo_path.replace(/\\/g, '/')}`;
-                console.log('Image path for restaurant:', restaurant.name, imagePath); // Logging image paths for each restaurant
                 return {
                     ...restaurant,
                     image: imagePath
@@ -106,7 +99,6 @@ function Main() {
 
     const handleScroll = (event) => {
         const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
-
         if (scrollHeight - scrollTop === clientHeight && !loading) {
             fetchRestaurants();
         }
@@ -131,14 +123,35 @@ function Main() {
 }
 
 function MyComponent() {
+    const [userInfo, setUserInfo] = useState({});
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            const decodedToken = decode(token);
+            console.log('Decoded JWT token:', decodedToken); // Log the contents of the token
+            console.log('payload:', decodedToken.payload); // Log the payload (data
+
+            setUserInfo({
+                name: decodedToken.payload.name,
+                email: decodedToken.payload.email
+            });
+        } else {
+            console.error('No token found');
+        }
+    }, []);
+
+    useEffect(() => {
+        console.log('User info:', userInfo);
+    }, [userInfo]);
+
     return (
         <div className="flex flex-col justify-center bg-white">
             <Navbar />
             <div className="flex flex-col w-full bg-white max-md:max-w-full">
-
                 <div className="mt-1.5 w-full max-md:max-w-full">
                     <div className="flex gap-5 max-md:flex-col max-md:gap-0">
-                        <Sidebar />
+                        <Sidebar userInfo={userInfo} />
                         <Main />
                     </div>
                 </div>
