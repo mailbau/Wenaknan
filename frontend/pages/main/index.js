@@ -5,7 +5,7 @@ import { decode } from 'jwt-js-decode';
 import Navbar from "@/components/navbar";
 import RestaurantCard from "../../components/restcard";
 
-function Sidebar({ userInfo }) {
+function Sidebar({ userInfo, onLogout }) {
     return (
         <aside className="flex flex-col w-[23%] max-md:ml-0 max-md:w-full">
             <div className="flex flex-col grow justify-between p-5 mx-auto w-full text-base font-medium bg-white max-md:mt-1.5">
@@ -57,7 +57,7 @@ function Sidebar({ userInfo }) {
                         </div>
                     </div>
                 </div>
-                <div className="flex gap-4 justify-center p-3 mt-3 whitespace-nowrap rounded text-slate-700">
+                <div className="flex gap-4 justify-center p-3 mt-3 whitespace-nowrap rounded text-slate-700 cursor-pointer" onClick={onLogout}>
                     <img
                         loading="lazy"
                         src=""
@@ -145,13 +145,18 @@ function MyComponent() {
         console.log('User info:', userInfo);
     }, [userInfo]);
 
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+    };
+
     return (
         <div className="flex flex-col justify-center bg-white">
             <Navbar />
             <div className="flex flex-col w-full bg-white max-md:max-w-full">
                 <div className="mt-1.5 w-full max-md:max-w-full">
                     <div className="flex gap-5 max-md:flex-col max-md:gap-0">
-                        <Sidebar userInfo={userInfo} />
+                        <Sidebar userInfo={userInfo} onLogout={handleLogout} />
                         <Main />
                     </div>
                 </div>
