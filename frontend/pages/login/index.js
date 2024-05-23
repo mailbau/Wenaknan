@@ -48,8 +48,12 @@ function LoginPage() {
                 password,
             });
 
+            const { token } = response.data;
+
             setSuccessMessage("Login successful");
             setErrorMessage("");
+
+            localStorage.setItem("token", token);
 
             // Clear the form
             setUsernameOrEmail("");
