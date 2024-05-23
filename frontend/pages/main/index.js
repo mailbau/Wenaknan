@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "@/components/navbar";
-import RestaurantCard from "./components/restcard";
+import RestaurantCard from "../../components/restcard";
 
 function Sidebar() {
     return (
