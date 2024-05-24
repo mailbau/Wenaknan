@@ -1,10 +1,11 @@
+// Import the useState and useEffect hooks from React
 import * as React from "react";
 import { useState, useEffect } from "react";
+import { useRouter } from 'next/router';
 import axios from "axios";
-import Link from "next/link";
 import { decode } from 'jwt-js-decode';
 import Navbar from "@/components/navbar";
-import RestaurantCard from "../../components/restcard";
+import RestaurantCard from "@/components/restcard";
 
 function Sidebar({ userInfo, onLogout }) {
     return (
@@ -24,7 +25,7 @@ function Sidebar({ userInfo, onLogout }) {
                             </a>
                         </li>
                         <li className="flex mt-3 w-full rounded">
-                            <a href="favorites" className="flex items-center gap-4 p-3 text-slate-700 rounded w-full">
+                            <a href="/favorites" className="flex items-center gap-4 p-3 text-slate-700 rounded w-full">
                                 <img
                                     loading="lazy"
                                     src="/assets/favorites.png"
@@ -73,67 +74,45 @@ function Sidebar({ userInfo, onLogout }) {
 
 const STORAGE_URL = 'http://localhost:8080';
 
-function Main() {
-    const [restaurants, setRestaurants] = useState([]);
-    const [loading, setLoading] = useState(false);
-
-    const fetchRestaurants = async () => {
-        try {
-            const response = await fetch('http://localhost:8080/restaurant?page=1&pageSize=10');
-            const data = await response.json();
-            const restaurantsWithAbsoluteImagePaths = data.map((restaurant) => {
-                const imagePath = `${STORAGE_URL}/${restaurant.restaurant_photo_path.replace(/\\/g, '/')}`;
-                return {
-                    ...restaurant,
-                    image: imagePath
-                };
-            });
-            setRestaurants(restaurantsWithAbsoluteImagePaths);
-        } catch (error) {
-            console.error('Error fetching restaurants', error);
-        }
-    };
-
-    useEffect(() => {
-        fetchRestaurants();
-    }, []);
-
-    const handleScroll = (event) => {
-        const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
-        if (scrollHeight - scrollTop === clientHeight && !loading) {
-            fetchRestaurants();
-        }
-    };
-
-    return (
-        <main
-            className="flex flex-col ml-5 w-[77%] max-md:ml-0 max-md:w-full"
-            onScroll={handleScroll}
-            style={{ overflowY: "scroll", maxHeight: "100vh" }}
-        >
-            <div className="flex flex-col grow items-center px-16 pt-12 text-black max-md:px-5 max-md:mt-1.5 max-md:max-w-full">
-                <div className="flex flex-col max-w-full w-[641px]">
-                    {restaurants.map((restaurant) => (
-                        <Link key={restaurant.restaurant_id} href={`/restaurants/${restaurant.restaurant_id}`}>
-                            <RestaurantCard restaurant={restaurant} />
-                        </Link>))}
-                </div>
-                {loading && <p>Loading...</p>}
-            </div>
-        </main>
-    );
-}
-
-function MyComponent() {
+function RestaurantDetails() {
+    const router = useRouter();
+    const { id } = router.query;
+    const [restaurant, setRestaurant] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [userInfo, setUserInfo] = useState({});
 
+    // Function to fetch restaurant details
+    const fetchRestaurant = async () => {
+        try {
+            const response = await axios.get(`${STORAGE_URL}/restaurant/${id}`);
+            const data = response.data;
+            const imagePath = `${STORAGE_URL}/${data.restaurant_photo_path.replace(/\\/g, '/')}`;
+            const restaurantWithImage = {
+                ...data,
+                image: imagePath
+            };
+            setRestaurant(restaurantWithImage);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching restaurant', error);
+            setLoading(false);
+        }
+    };
+
+    // Effect hook to fetch restaurant details when id changes
+    useEffect(() => {
+        if (id) {
+            fetchRestaurant();
+        }
+    }, [id]);
+
+    // Effect hook to fetch user info when component mounts
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
             const decodedToken = decode(token);
             console.log('Decoded JWT token:', decodedToken); // Log the contents of the token
-            console.log('payload:', decodedToken.payload); // Log the payload (data
-
+            console.log('payload:', decodedToken.payload);             // Log the payload (data)
             setUserInfo({
                 name: decodedToken.payload.name,
                 email: decodedToken.payload.email
@@ -143,23 +122,40 @@ function MyComponent() {
         }
     }, []);
 
-    useEffect(() => {
-        console.log('User info:', userInfo);
-    }, [userInfo]);
-
     const handleLogout = () => {
         localStorage.removeItem('token');
         window.location.href = '/login';
     };
 
+    // Rendering loading state while data is being fetched
+    if (loading) {
+        return <p>Loading...</p>;
+    }
+
+    // Rendering "Restaurant not found" message if restaurant data is not available
+    if (!restaurant) {
+        return <p>Restaurant not found</p>;
+    }
+
+    // Rendering the RestaurantDetails component with fetched data
     return (
         <div className="flex flex-col justify-center bg-white">
             <Navbar />
             <div className="flex flex-col w-full bg-white max-md:max-w-full">
                 <div className="mt-1.5 w-full max-md:max-w-full">
                     <div className="flex gap-5 max-md:flex-col max-md:gap-0">
+                        {/* Passing userInfo and handleLogout to Sidebar component */}
                         <Sidebar userInfo={userInfo} onLogout={handleLogout} />
-                        <Main />
+                        <main
+                            className="flex flex-col ml-5 w-[77%] max-md:ml-0 max-md:w-full"
+                            style={{ overflowY: "scroll", maxHeight: "100vh" }}
+                        >
+                            <div className="flex flex-col grow items-center px-16 pt-12 text-black max-md:px-5 max-md:mt-1.5 max-md:max-w-full">
+                                <div className="flex flex-col max-w-full w-[641px]">
+                                    <RestaurantCard restaurant={restaurant} />
+                                </div>
+                            </div>
+                        </main>
                     </div>
                 </div>
             </div>
@@ -167,4 +163,5 @@ function MyComponent() {
     );
 }
 
-export default MyComponent;
+export default RestaurantDetails;
+
