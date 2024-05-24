@@ -20,6 +20,22 @@ const restaurantController = {
         }
     },
 
+    getRestaurantById: async (req, res) => {
+        try {
+            const { id } = req.params;
+
+            const foundRestaurant = await restaurant.findByPk(id);
+            if (!foundRestaurant) {
+                return res.status(404).json({ message: 'Restaurant not found' });
+            }
+
+            res.status(200).json(foundRestaurant);
+        } catch (error) {
+            console.error('Error getting restaurant by ID', error);
+            res.status(500).json({ error: error.message });
+        }
+    },
+
     addRestaurant: async (req, res) => {
         try {
             if (!req.file) {
