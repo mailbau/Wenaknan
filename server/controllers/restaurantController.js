@@ -26,7 +26,7 @@ const restaurantController = {
                 return res.status(400).json({ message: 'Please upload an image' });
             }
 
-            const { restaurant_name, restaurant_location, restaurant_description, restaurant_rating } = req.body;
+            const { restaurant_name, restaurant_location, restaurant_description, restaurant_rating, category_id, restaurant_address } = req.body;
             const restaurant_photo_path = req.file.path;
 
             const newRestaurant = await restaurant.create({
@@ -34,7 +34,9 @@ const restaurantController = {
                 restaurant_location,
                 restaurant_description,
                 restaurant_rating,
-                restaurant_photo_path
+                restaurant_photo_path,
+                category_id,
+                restaurant_address
             });
             res.status(201).json(newRestaurant);
         } catch (error) {
