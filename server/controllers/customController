@@ -1,0 +1,15 @@
+const category = require('../models/categoryModel');
+
+const customController = {
+    getRecommendation: async (req, res) => {
+        try {
+            const categories = await category.findAll();
+            res.status(200).json(categories);
+        } catch (error) {
+            console.error('Error getting all categories', error);
+            res.status(500).json({ error: error.message });
+        }
+    }
+};
+
+module.exports = customController;
