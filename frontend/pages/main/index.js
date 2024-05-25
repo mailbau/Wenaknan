@@ -40,6 +40,16 @@ function Sidebar({ userInfo, onLogout }) {
                                     src="/assets/profile.png"
                                     className="shrink-0 w-5 aspect-square"
                                 />
+                                <span className="flex-1">Personalized</span>
+                            </a>
+                        </li>
+                        <li className="flex mt-3 w-full rounded">
+                            <a href="#" className="flex items-center gap-4 p-3 text-slate-700 rounded w-full">
+                                <img
+                                    loading="lazy"
+                                    src="/assets/profile.png"
+                                    className="shrink-0 w-5 aspect-square"
+                                />
                                 <span className="flex-1">Profile</span>
                             </a>
                         </li>
@@ -71,6 +81,15 @@ function Sidebar({ userInfo, onLogout }) {
     );
 }
 
+//shuffle function
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
 const STORAGE_URL = 'http://localhost:8080';
 
 function Main() {
@@ -80,12 +99,15 @@ function Main() {
     const fetchRestaurants = async () => {
         try {
             setLoading(true);
-            const response = await axios.get('http://localhost:8080/restaurant/status', {
+            const response = await axios.get('http://localhost:8080/restaurant/status/', {
                 params: {
                     user_id: 1 // Replace with the actual active user ID
                 }
             });
-            const data = response.data;
+            let data = response.data;
+
+            data = shuffle(data);
+
             const restaurantsWithAbsoluteImagePaths = data.map((restaurant) => {
                 const imagePath = `${STORAGE_URL}/${restaurant.restaurant_photo_path.replace(/\\/g, '/')}`;
                 return {
