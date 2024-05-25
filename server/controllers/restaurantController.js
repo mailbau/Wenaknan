@@ -53,6 +53,38 @@ const restaurantController = {
         }
     },
 
+    getRestaurantByIdStatus: async (req, res) => {
+        const userId = req.query.user_id; // Get the active user ID from query parameters
+        const restaurantId = req.params.id;
+
+        const query = `SELECT 
+                r.*, 
+                CASE 
+                    WHEN f.user_id IS NOT NULL THEN TRUE 
+                    ELSE FALSE 
+                END AS is_liked
+            FROM 
+                restaurant r
+            LEFT JOIN 
+                favorite f
+            ON 
+                r.restaurant_id = f.restaurant_id AND f.user_id = :userId
+            WHERE 
+                r.restaurant_id = :restaurantId;`;
+
+        try {
+            const restaurants = await sequelize.query(query, {
+            replacements: { userId: userId , restaurantId: restaurantId},
+            type: sequelize.QueryTypes.SELECT
+            });
+
+            res.json(restaurants[0]);
+        } catch (error) {
+            console.error('Error fetching restaurants:', error);
+            res.status(500).json({ error: 'An error occurred while fetching restaurants.' });
+        }
+    },
+
     getRestaurantById: async (req, res) => {
         try {
             const { id } = req.params;

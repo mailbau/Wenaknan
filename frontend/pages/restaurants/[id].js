@@ -84,7 +84,9 @@ function RestaurantDetails() {
     // Function to fetch restaurant details
     const fetchRestaurant = async () => {
         try {
-            const response = await axios.get(`${STORAGE_URL}/restaurant/${id}`);
+            const response = await axios.get(`${STORAGE_URL}/restaurant/status/${id}`,{
+                params: { user_id: 1 }
+            });
             const data = response.data;
             const imagePath = `${STORAGE_URL}/${data.restaurant_photo_path.replace(/\\/g, '/')}`;
             const restaurantWithImage = {
@@ -115,7 +117,8 @@ function RestaurantDetails() {
             console.log('payload:', decodedToken.payload);             // Log the payload (data)
             setUserInfo({
                 name: decodedToken.payload.name,
-                email: decodedToken.payload.email
+                email: decodedToken.payload.email,
+                user_id: decodedToken.payload.user_id
             });
         } else {
             console.error('No token found');
@@ -152,7 +155,7 @@ function RestaurantDetails() {
                         >
                             <div className="flex flex-col grow items-center px-16 pt-12 text-black max-md:px-5 max-md:mt-1.5 max-md:max-w-full">
                                 <div className="flex flex-col max-w-full w-[641px]">
-                                    <RestaurantCard restaurant={restaurant} />
+                                    <RestaurantCard restaurant={restaurant} userId={1} />
                                 </div>
                             </div>
                         </main>
