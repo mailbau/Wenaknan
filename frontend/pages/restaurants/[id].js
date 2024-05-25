@@ -35,6 +35,16 @@ function Sidebar({ userInfo, onLogout }) {
                             </a>
                         </li>
                         <li className="flex mt-3 w-full rounded">
+                            <a href="personalized" className="flex items-center gap-4 p-3 text-slate-700 rounded w-full">
+                                <img
+                                    loading="lazy"
+                                    src="/assets/profile.png"
+                                    className="shrink-0 w-5 aspect-square"
+                                />
+                                <span className="flex-1">Personalized</span>
+                            </a>
+                        </li>
+                        <li className="flex mt-3 w-full rounded">
                             <a href="#" className="flex items-center gap-4 p-3 text-slate-700 rounded w-full">
                                 <img
                                     loading="lazy"
