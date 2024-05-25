@@ -79,8 +79,13 @@ function Main() {
 
     const fetchRestaurants = async () => {
         try {
-            const response = await fetch('http://localhost:8080/restaurant?page=1&pageSize=50');
-            const data = await response.json();
+            setLoading(true);
+            const response = await axios.get('http://localhost:8080/restaurant/status', {
+                params: {
+                    user_id: 1 // Replace with the actual active user ID
+                }
+            });
+            const data = response.data;
             const restaurantsWithAbsoluteImagePaths = data.map((restaurant) => {
                 const imagePath = `${STORAGE_URL}/${restaurant.restaurant_photo_path.replace(/\\/g, '/')}`;
                 return {
@@ -88,9 +93,12 @@ function Main() {
                     image: imagePath
                 };
             });
+
             setRestaurants(restaurantsWithAbsoluteImagePaths);
+            setLoading(false);
         } catch (error) {
             console.error('Error fetching restaurants', error);
+            setLoading(false);
         }
     };
 
@@ -114,9 +122,8 @@ function Main() {
             <div className="flex flex-col grow items-center px-16 pt-12 text-black max-md:px-5 max-md:mt-1.5 max-md:max-w-full">
                 <div className="flex flex-col max-w-full w-[641px]">
                     {restaurants.map((restaurant) => (
-                        <Link key={restaurant.restaurant_id} href={`/restaurants/${restaurant.restaurant_id}`}>
-                            <RestaurantCard restaurant={restaurant} />
-                        </Link>))}
+                            <RestaurantCard restaurant={restaurant} userId={1}/>
+                        ))}
                 </div>
                 {loading && <p>Loading...</p>}
             </div>

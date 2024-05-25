@@ -2,8 +2,8 @@ import * as React from "react";
 import Link from "next/link";
 import HeartButton from "@/components/heartBtn";
 
-function RestaurantCard({ restaurant }) {
-    const { restaurant_id, restaurant_name, restaurant_description, restaurant_rating, image } = restaurant;
+function RestaurantCard({ restaurant, userId }) {
+    const { restaurant_id, restaurant_name, restaurant_description, restaurant_rating, image, is_liked } = restaurant;
 
     const handleHeartClick = (e) => {
         e.stopPropagation();
@@ -30,7 +30,12 @@ function RestaurantCard({ restaurant }) {
                 className="flex gap-5 justify-between pr-8 mt-5 w-full h-10 text-2xl font-semibold whitespace-nowrap max-md:flex-wrap max-md:pr-5 max-md:max-w-full"
                 onClick={handleRatingClick}
             >
-                <HeartButton onClick={handleHeartClick} />
+                <HeartButton 
+                    restaurantId={restaurant_id}
+                    userId={userId}
+                    initialLiked={is_liked}
+                    onClick={handleHeartClick} 
+                />
                 <div className="flex gap-1">
                     <div>{restaurant_rating}</div>
                     <img
