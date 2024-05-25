@@ -1,5 +1,7 @@
 const restaurant = require('../models/restaurantModel');
 const upload = require('../middleware/multerConfig');
+const favorite = require('../models/favoriteModel');
+const sequelize = require('../config/db');
 
 const restaurantController = {
     getAllRestaurants: async (req, res) => {
@@ -17,6 +19,37 @@ const restaurantController = {
         } catch (error) {
             console.error('Error getting all restaurants', error);
             res.status(500).json({ error: error.message });
+        }
+    },
+
+    getAllRestaurantsStatus: async (req, res) => {
+        const userId = req.query.user_id; // Get the active user ID from query parameters
+
+        const query = `
+            SELECT 
+            r.*, 
+            CASE 
+                WHEN f.user_id IS NOT NULL THEN TRUE 
+                ELSE FALSE 
+            END AS is_liked
+            FROM 
+            restaurant r
+            LEFT JOIN 
+            favorite f
+            ON 
+            r.restaurant_id = f.restaurant_id AND f.user_id = :userId;
+        `;
+
+        try {
+            const restaurants = await sequelize.query(query, {
+            replacements: { userId: userId },
+            type: sequelize.QueryTypes.SELECT
+            });
+
+            res.json(restaurants);
+        } catch (error) {
+            console.error('Error fetching restaurants:', error);
+            res.status(500).json({ error: 'An error occurred while fetching restaurants.' });
         }
     },
 

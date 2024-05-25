@@ -79,7 +79,7 @@ function Main() {
 
     const fetchRestaurants = async () => {
         try {
-            const response = await fetch('http://localhost:8080/restaurant?page=1&pageSize=10');
+            const response = await fetch('http://localhost:8080/restaurant?page=1&pageSize=50');
             const data = await response.json();
             const restaurantsWithAbsoluteImagePaths = data.map((restaurant) => {
                 const imagePath = `${STORAGE_URL}/${restaurant.restaurant_photo_path.replace(/\\/g, '/')}`;
