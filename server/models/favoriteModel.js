@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
+const restaurant = require('./restaurantModel');
 
 const favorite = sequelize.define('favorite', {
     favorite_id: {
@@ -15,6 +16,10 @@ const favorite = sequelize.define('favorite', {
     restaurant_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+            model: restaurant,
+            key: 'restaurant_id'
+          }
     },
 }, {
     tableName: 'favorite',

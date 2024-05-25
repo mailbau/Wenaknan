@@ -21,7 +21,7 @@ function RestaurantCard({ restaurant }) {
                     <img
                         loading="lazy"
                         src={image}
-                        className="mt-5 w-full aspect-[2.22] max-md:max-w-full object-cover"
+                        className="mt-5 w-full aspect-[2.22] max-md:max-w-full object-cover rounded-xl shadow-lg"
                         alt={restaurant_name}
                     />
                 </div>
