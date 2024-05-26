@@ -99,6 +99,30 @@ const userController = {
             console.error('Error logging in user', error);
             res.status(500).json({ error: error.message });
         }
+    },
+
+    updateUser: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { name, user_name, user_email } = req.body;
+
+            const existingUser = await user.findOne({ where: { user_id: id } });
+            if (!existingUser) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+
+            // Update user information
+            existingUser.name = name || existingUser.name;
+            existingUser.user_name = user_name || existingUser.user_name;
+            existingUser.user_email = user_email || existingUser.user_email;
+
+            await existingUser.save();
+
+            res.status(200).json({ message: 'User information updated', user: existingUser });
+        } catch (error) {
+            console.error('Error updating user', error);
+            res.status(500).json({ error: error.message });
+        }
     }
 
 };
