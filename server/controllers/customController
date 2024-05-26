@@ -7,7 +7,8 @@ const axios = require('axios');
 
 const customController = {
     getRecommendation: async (req, res) => {
-        const { userId } = req.body;
+        const userId = req.query.userId;
+        console.log('userId', userId)
 
         try {
             // Fetch all restaurants with their categories
