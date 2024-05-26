@@ -26,18 +26,21 @@ const restaurantController = {
         const userId = req.query.user_id; // Get the active user ID from query parameters
 
         const query = `
-            SELECT 
-            r.*, 
-            CASE 
-                WHEN f.user_id IS NOT NULL THEN TRUE 
-                ELSE FALSE 
-            END AS is_liked
-            FROM 
-            restaurant r
-            LEFT JOIN 
-            favorite f
-            ON 
-            r.restaurant_id = f.restaurant_id AND f.user_id = :userId;
+                SELECT 
+                    r.*, 
+                    c.category_name as category,
+                    CASE 
+                        WHEN f.user_id IS NOT NULL THEN TRUE 
+                        ELSE FALSE 
+                    END AS is_liked
+                FROM 
+                    restaurant r
+                LEFT JOIN 
+                    favorite f
+                    ON r.restaurant_id = f.restaurant_id AND f.user_id = :userId
+                LEFT JOIN 
+                    category c
+                    ON r.category_id = c.category_id;
         `;
 
         try {
@@ -59,6 +62,7 @@ const restaurantController = {
 
         const query = `SELECT 
                 r.*, 
+                c.category_name as category,
                 CASE 
                     WHEN f.user_id IS NOT NULL THEN TRUE 
                     ELSE FALSE 
@@ -69,8 +73,12 @@ const restaurantController = {
                 favorite f
             ON 
                 r.restaurant_id = f.restaurant_id AND f.user_id = :userId
+            LEFT JOIN 
+                category c
+                ON r.category_id = c.category_id
             WHERE 
-                r.restaurant_id = :restaurantId;`;
+                r.restaurant_id = :restaurantId;
+        `;
 
         try {
             const restaurants = await sequelize.query(query, {
