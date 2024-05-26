@@ -15,6 +15,9 @@ router.get('/:id', restaurantController.getRestaurantById);
 // Get a restaurant by ID with favorite status
 router.get('/status/:id', restaurantController.getRestaurantByIdStatus);
 
+// Get Favorite Restaurants
+router.get('/favorites', restaurantController.getRestaurantFavorites);
+
 // Add a new restaurant
 router.post('/add', upload.single('file'), restaurantController.addRestaurant);
 
