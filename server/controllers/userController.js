@@ -1,6 +1,7 @@
 const user = require('../models/userModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const sequelize = require('../config/db');
 
 const userController = {
     getAllUsers: async (req, res) => {
@@ -123,7 +124,42 @@ const userController = {
             console.error('Error updating user', error);
             res.status(500).json({ error: error.message });
         }
+    },
+
+    getUserFavorites: async (req, res) => {
+        const userId = req.params.id;
+        console.log('MY USER ID', userId);
+
+        const query = `
+            SELECT 
+                r.*, 
+                c.category_name AS category,
+                TRUE AS is_liked
+            FROM 
+                restaurant r
+            INNER JOIN 
+                favorite f
+                ON r.restaurant_id = f.restaurant_id
+            INNER JOIN 
+                category c
+                ON r.category_id = c.category_id
+            WHERE 
+                f.user_id = :userId;
+        `;
+
+        try {
+            const favorites = await sequelize.query(query, {
+                replacements: { userId: userId },
+                type: sequelize.QueryTypes.SELECT
+            });
+
+            res.status(200).json(favorites);
+        } catch (error) {
+            console.error('Error getting restaurant favorites', error);
+            res.status(500).json({ error: error.message });
+        }
     }
+
 
 };
 

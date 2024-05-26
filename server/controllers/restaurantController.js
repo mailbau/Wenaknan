@@ -1,7 +1,6 @@
 const restaurant = require('../models/restaurantModel');
 const upload = require('../middleware/multerConfig');
 const favorite = require('../models/favoriteModel');
-const sequelize = require('../config/db');
 
 const restaurantController = {
     getAllRestaurants: async (req, res) => {
@@ -24,7 +23,7 @@ const restaurantController = {
 
     getAllRestaurantsStatus: async (req, res) => {
         const userId = req.query.user_id; // Get the active user ID from query parameters
-        
+
         const query = `
                 SELECT 
                     r.*, 
@@ -45,8 +44,8 @@ const restaurantController = {
 
         try {
             const restaurants = await sequelize.query(query, {
-            replacements: { userId: userId },
-            type: sequelize.QueryTypes.SELECT
+                replacements: { userId: userId },
+                type: sequelize.QueryTypes.SELECT
             });
 
             res.json(restaurants);
@@ -82,8 +81,8 @@ const restaurantController = {
 
         try {
             const restaurants = await sequelize.query(query, {
-            replacements: { userId: userId , restaurantId: restaurantId},
-            type: sequelize.QueryTypes.SELECT
+                replacements: { userId: userId, restaurantId: restaurantId },
+                type: sequelize.QueryTypes.SELECT
             });
 
             res.json(restaurants[0]);
@@ -105,41 +104,6 @@ const restaurantController = {
             res.status(200).json(foundRestaurant);
         } catch (error) {
             console.error('Error getting restaurant by ID', error);
-            res.status(500).json({ error: error.message });
-        }
-    },
-
-    getRestaurantFavorites: async (req, res) => {
-        const userId = req.query.user_id;
-            console.log('MY USER ID', userId);
-
-            const query = `
-                SELECT 
-                    r.*, 
-                    c.category_name AS category,
-                    TRUE AS is_liked
-                FROM 
-                    restaurant r
-                INNER JOIN 
-                    favorite f
-                    ON r.restaurant_id = f.restaurant_id
-                INNER JOIN 
-                    category c
-                    ON r.category_id = c.category_id
-                WHERE 
-                    f.user_id = :userId;
-            `;
-        
-        try {
-            
-            const favorites = await sequelize.query(query, {
-                replacements: { userId: userId },
-                type: sequelize.QueryTypes.SELECT
-            });
-
-            res.status(200).json(favorites);
-        } catch (error) {
-            console.error('Error getting restaurant favorites', error);
             res.status(500).json({ error: error.message });
         }
     },
