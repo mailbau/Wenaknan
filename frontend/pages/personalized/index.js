@@ -25,14 +25,12 @@ function Main() {
     const fetchRestaurants = async () => {
         try {
             setLoading(true);
-            const response = await axios.get('http://localhost:8080/restaurant/status/', {
-                params: {
-                    user_id: 1 // Replace with the actual active user ID
+            const response = await axios.get('http://localhost:8080/custom/recommend', {
+                params:{
+                    "userId": 1
                 }
             });
             let data = response.data;
-
-            data = shuffle(data);
 
             const restaurantsWithAbsoluteImagePaths = data.map((restaurant) => {
                 const imagePath = `${STORAGE_URL}/${restaurant.restaurant_photo_path.replace(/\\/g, '/')}`;
