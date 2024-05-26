@@ -27,45 +27,71 @@ function MainSection({ userInfo }) {
     );
 }
 
-function FormSection() {
-    const [newUsername, setNewUsername] = useState("");
-    const [newEmail, setNewEmail] = useState("");
+function FormSection({ userInfo, setUserInfo }) {
+    // Define state for input fields
+    const [name, setName] = useState(userInfo.name || '');
+    const [userName, setUserName] = useState(userInfo.userName || '');
+    const [email, setEmail] = useState(userInfo.email || '');
     const router = useRouter();
 
-    const handleSubmit = (event) => {
+    // Function to handle form submission
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        // Here, you can perform any action with the new username and email
-        console.log("Submitted new username:", newUsername);
-        console.log("Submitted new email:", newEmail);
-
-        router.push('/profile');
+        try {
+            const response = await fetch(`http://localhost:8080/user/${userInfo.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, user_name: userName, user_email: email }),
+            });
+            if (response.ok) {
+                const updatedUserInfo = await response.json();
+                setUserInfo(updatedUserInfo.user);
+                router.push('/profile');
+            } else {
+                console.error('Failed to update user information:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error updating user information:', error);
+        }
     };
 
     return (
         <form onSubmit={handleSubmit} className="flex flex-col self-center pt-2.5 pb-20 mt-8 w-full max-w-lg bg-white bg-opacity-80 rounded-[40px]">
             <div className="flex flex-col px-11 mx-auto mt-5 mb-2.5 w-full text-base text-black grow-0 min-h-[200px] max-md:px-5 max-md:max-w-full">
-                <label htmlFor="newUsername" className="mr-auto max-md:max-w-full">
-                    New username
+                <label htmlFor="newName" className="mr-auto max-md:max-w-full">
+                    Name
                 </label>
                 <input
-                    id="newUsername"
-                    aria-label="Type your new username"
-                    placeholder="Type your new username"
+                    id="newName"
+                    aria-label="Type your new name"
+                    placeholder="Type your new name"
                     className="justify-center items-start px-6 py-6 mt-6 text-sm font-light bg-white rounded-lg border border-blue-500 border-solid text-zinc-500 max-md:px-5 max-md:max-w-full"
-                    value={newUsername}
-                    onChange={(e) => setNewUsername(e.target.value)}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                />
+                <label htmlFor="newUserName" className="mt-5 max-md:max-w-full">
+                    User Name
+                </label>
+                <input
+                    id="newUserName"
+                    aria-label="Type your new user name"
+                    placeholder="Type your new user name"
+                    className="justify-center items-start px-6 py-6 mt-6 text-sm font-light bg-white rounded-lg border border-blue-500 border-solid text-zinc-500 max-md:px-5 max-md:max-w-full"
+                    value={userName}
+                    onChange={(e) => setUserName(e.target.value)}
                 />
                 <label htmlFor="newEmail" className="mt-5 max-md:max-w-full">
-                    New Email
+                    Email
                 </label>
                 <input
                     id="newEmail"
                     aria-label="Type your new email"
                     placeholder="Type your new email"
-                    type="email"
                     className="justify-center items-start px-6 py-6 mt-6 text-sm font-light bg-white rounded-lg border border-blue-500 border-solid text-zinc-500 max-md:px-5 max-md:max-w-full"
-                    value={newEmail}
-                    onChange={(e) => setNewEmail(e.target.value)}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                 />
             </div>
             <button
@@ -81,24 +107,33 @@ function FormSection() {
 
 function MyComponent() {
     const [userInfo, setUserInfo] = useState({});
+    const router = useRouter();
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
             const decodedToken = decode(token);
+            console.log('Decoded JWT token:', decodedToken); // Log the contents of the token
+            console.log('payload:', decodedToken.payload); // Log the payload (data
+
             setUserInfo({
+                id: decodedToken.payload.user_id,
                 name: decodedToken.payload.name,
+                username: decodedToken.payload.username,
                 email: decodedToken.payload.email,
-                profileImage: decodedToken.payload.profileImage
             });
         } else {
             console.error('No token found');
         }
     }, []);
 
+    useEffect(() => {
+        console.log('User info:', userInfo);
+    }, [userInfo]);
+
     const handleLogout = () => {
         localStorage.removeItem('token');
-        window.location.href = '/login';
+        router.push('/login');
     };
 
     return (
@@ -108,7 +143,7 @@ function MyComponent() {
                 <Sidebar userInfo={userInfo} onLogout={handleLogout} />
                 <div className="flex flex-col flex-1 items-center">
                     <MainSection userInfo={userInfo} />
-                    <FormSection />
+                    <FormSection userInfo={userInfo} setUserInfo={setUserInfo} />
                 </div>
             </div>
         </div>
