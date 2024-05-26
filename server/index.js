@@ -21,6 +21,10 @@ app.use('/favorite', favoriteRouter);
 app.use('/category', categoryRouter);
 app.use('/custom', customRouter);
 
+app.get('/', (req, res) => {
+    res.json({ message: 'Hello World!' });
+});
+
 const server = app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
     console.log(listEndpoints(app));
