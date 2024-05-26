@@ -1,5 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
+const category = require('./categoryModel');
+
 
 const restaurant = sequelize.define('restaurant', {
     restaurant_id: {
@@ -22,6 +24,10 @@ const restaurant = sequelize.define('restaurant', {
     },
     category_id: {
         type: DataTypes.INTEGER,
+        references: {
+            model: category,
+            key: 'category_id',
+          },
         allowNull: false,
     },
     restaurant_address: {
@@ -39,5 +45,7 @@ const restaurant = sequelize.define('restaurant', {
     tableName: 'restaurant',
     timestamps: false,
 });
+
+restaurant.belongsTo(category, { foreignKey: 'category_id' });
 
 module.exports = restaurant;

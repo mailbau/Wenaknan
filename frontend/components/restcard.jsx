@@ -3,7 +3,7 @@ import Link from "next/link";
 import HeartButton from "@/components/heartBtn";
 
 function RestaurantCard({ restaurant, userId }) {
-    const { restaurant_id, restaurant_name, restaurant_description, restaurant_rating, image, is_liked } = restaurant;
+    const { restaurant_id, restaurant_name, restaurant_description, restaurant_rating, image, category, is_liked } = restaurant;
 
     const handleHeartClick = (e) => {
         e.stopPropagation();
@@ -53,7 +53,7 @@ function RestaurantCard({ restaurant, userId }) {
                             {restaurant_description}
                         </p>
                         <p>
-                            Category: Chicken
+                            Category: {category}
                         </p>
                     </div>
                 </div>
